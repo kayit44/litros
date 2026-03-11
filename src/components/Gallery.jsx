@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { categories } from "../data/cakes";
 
-const WA_NUMBER  = "905XXXXXXXXX";
+const WA_NUMBER  = "905324224244";
 const WA_MESSAGE = (title) => `Merhaba, "${title}" pastası hakkında sipariş vermek istiyorum.`;
 const WA_URL     = (title) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE(title))}`;

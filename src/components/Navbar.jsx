@@ -9,7 +9,7 @@ const navLinks = [
 ];
 
 // ─── Whatsapp numarasını buradan değiştir ───────────────────
-const WA_NUMBER = "905XXXXXXXXX";
+const WA_NUMBER = "905324224244";
 const WA_MESSAGE = "Merhaba, pasta siparişi hakkında bilgi almak istiyorum.";
 const WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 

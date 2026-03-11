@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
 
-const WA_NUMBER = "905XXXXXXXXX";
+const WA_NUMBER = "905324224244";
 
 const CATEGORY_LABELS = {
   "dogum-gunu": "Doğum Günü",
