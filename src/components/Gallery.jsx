@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { categories } from "../data/cakes";
 
-const WA_NUMBER  = "905324224244";
+const WA_NUMBER  = "905XXXXXXXXX";
 const WA_MESSAGE = (title) => `Merhaba, "${title}" pastası hakkında sipariş vermek istiyorum.`;
 const WA_URL     = (title) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE(title))}`;
@@ -26,7 +26,8 @@ const cardVariants = {
 };
 
 function CakeCard({ cake, index }) {
-  const [hovered, setHovered] = useState(false);
+  const isMobile = window.innerWidth <= 768;
+  const [hovered, setHovered] = useState(isMobile);
   const navigate = useNavigate();
 
   return (
