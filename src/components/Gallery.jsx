@@ -122,24 +122,7 @@ function CakeCard({ cake, index }) {
           ))}
         </Motion.div>
 
-        <Motion.button
-          animate={{ y: hovered ? 0 : 20, opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.4, delay: 0.17 }}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={() => { sessionStorage.setItem('galleryScrollPending', String(window.scrollY)); navigate(`/pasta/${cake.id}`); }}
-          style={{
-            display: "flex", alignItems: "center",
-            justifyContent: "center", gap: "8px",
-            padding: "12px 20px", background: "var(--gold)", color: "white",
-            fontFamily: "'Jost', sans-serif", fontSize: "13px",
-            letterSpacing: "2px", textTransform: "uppercase",
-            fontWeight: 500, border: "none", cursor: "pointer",
-            width: "100%",
-          }}
-        >
-          Detayları Gör →
-        </Motion.button>
+      
       </Motion.div>
 
       {cake.featured && (
