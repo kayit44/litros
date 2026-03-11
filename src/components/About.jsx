@@ -31,8 +31,8 @@ export default function About() {
           transform: "translateY(-50%) rotate(90deg)",
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(80px, 12vw, 160px)",
-          fontWeight: 300,
-          color: "rgba(201,169,110,0.05)",
+          fontWeight: 400,
+          color: "rgba(180,80,100,0.06)",
           whiteSpace: "nowrap",
           pointerEvents: "none",
           userSelect: "none",
@@ -106,11 +106,11 @@ export default function About() {
             >
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "40px", fontWeight: 300, color: "var(--gold)", lineHeight: 1,
+                fontSize: "40px", fontWeight: 500, color: "var(--gold)", lineHeight: 1,
               }}>5+</div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "8px",
-                letterSpacing: "2.5px", textTransform: "uppercase",
+                fontFamily: "'Jost', sans-serif", fontSize: "13px",
+                letterSpacing: "1px", textTransform: "uppercase",
                 color: "var(--gold-light)", marginTop: "6px",
               }}>Yıllık Tecrübe</div>
             </Motion.div>
@@ -131,13 +131,13 @@ export default function About() {
             <span style={{ fontSize: "24px" }}>🌿</span>
             <div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "11px",
-                fontWeight: 500, color: "var(--dark)", letterSpacing: "0.5px",
+                fontFamily: "'Jost', sans-serif", fontSize: "14px",
+                fontWeight: 500, color: "var(--dark)", letterSpacing: "0.3px",
               }}>Doğal Malzeme</div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "9px",
-                letterSpacing: "1.5px", textTransform: "uppercase",
-                color: "var(--brown-light)", marginTop: "2px",
+                fontFamily: "'Jost', sans-serif", fontSize: "12px",
+                letterSpacing: "1px", textTransform: "uppercase",
+                color: "var(--brown)", marginTop: "2px",
               }}>Katkısız · Taze · Özenli</div>
             </div>
           </Motion.div>
@@ -166,8 +166,8 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.15 }}
             style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(34px, 4vw, 52px)",
-              fontWeight: 300, lineHeight: 1.15,
+              fontSize: "clamp(30px, 4vw, 52px)",
+              fontWeight: 500, lineHeight: 1.2,
               color: "var(--dark)", marginBottom: "24px",
             }}
           >
@@ -187,9 +187,9 @@ export default function About() {
               animate={rightInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
               style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "14px",
-                lineHeight: 1.9, color: "var(--text)",
-                fontWeight: 300, marginBottom: "16px", letterSpacing: "0.3px",
+                fontFamily: "'Jost', sans-serif", fontSize: "15px",
+                lineHeight: 1.85, color: "var(--dark)",
+                fontWeight: 400, marginBottom: "16px", letterSpacing: "0.2px",
               }}
             >
               {text}
@@ -213,11 +213,11 @@ export default function About() {
                 transition={{ type: "spring", stiffness: 300 }}
                 style={{
                   display: "flex", alignItems: "center", gap: "10px",
-                  fontFamily: "'Jost', sans-serif", fontSize: "12px",
-                  letterSpacing: "1px", color: "var(--brown)", fontWeight: 400,
+                  fontFamily: "'Jost', sans-serif", fontSize: "14px",
+                  letterSpacing: "0.5px", color: "var(--dark)", fontWeight: 500,
                 }}
               >
-                <span style={{ color: "var(--gold)", fontSize: "8px", flexShrink: 0 }}>✦</span>
+                <span style={{ color: "var(--gold)", fontSize: "10px", flexShrink: 0 }}>✦</span>
                 {label}
               </Motion.div>
             ))}
@@ -231,14 +231,14 @@ export default function About() {
             <div style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: "32px", fontStyle: "italic",
-              fontWeight: 400, color: "var(--brown)", lineHeight: 1,
+              fontWeight: 500, color: "var(--dark)", lineHeight: 1,
             }}>
               Litros Cake House
             </div>
             <div style={{
-              fontFamily: "'Jost', sans-serif", fontSize: "9px",
-              letterSpacing: "2.5px", textTransform: "uppercase",
-              color: "var(--gold)", marginTop: "6px",
+              fontFamily: "'Jost', sans-serif", fontSize: "12px",
+              letterSpacing: "2px", textTransform: "uppercase",
+              color: "var(--gold)", marginTop: "6px", fontWeight: 500,
             }}>
               El Yapımı Butik Pastalar
             </div>
