@@ -4,19 +4,19 @@
 
 /* ─── CSS Variables ─────────────────────────────────────── */
 :root {
-  /* ── Zemin & Metin (değişmedi, premium his korunuyor) ── */
-  --cream:       #FDF6F0;
-  --cream-dark:  #F7EDE6;
-  --dark:        #2A1A1F;
-  --brown:       #4A2D35;
-  --brown-light: #7A5260;
+  /* ── Zemin & Metin ── */
+  --cream:       #FAF0EB;
+  --cream-dark:  #F2E0D8;
+  --dark:        #1A0A0F;
+  --brown:       #3A1D25;
+  --brown-light: #6A3D4A;
   --white:       #FFFBF9;
-  --text:        #4A2D35;
+  --text:        #2E1219;   /* daha koyu — daha iyi okunabilirlik */
 
-  /* ── Logodaki pembe tonları — aksan renk olarak ── */
-  --gold:        #D4748A;   /* ana pembe — eski gold'un yerine */
-  --gold-light:  #EDAFC0;   /* açık pembe — eski gold-light yerine */
-  --gold-dark:   #B5506A;   /* koyu pembe — eski gold-dark yerine */
+  /* ── Pembe tonlar ── */
+  --gold:        #C45A72;   /* daha doygun pembe */
+  --gold-light:  #E08AA0;   /* orta pembe */
+  --gold-dark:   #9E3050;   /* koyu pembe */
 }
 
 /* ─── Base ──────────────────────────────────────────────── */
@@ -38,6 +38,8 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 /* ─── Typography ────────────────────────────────────────── */
@@ -200,7 +202,7 @@ body::after {
 }
 
 .marquee-track {
-  animation: marquee 100s linear infinite;
+  animation: marquee 90s linear infinite;
 }
 
 /* ─── Float Animation ───────────────────────────────────── */

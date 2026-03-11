@@ -224,14 +224,14 @@ export default function Gallery() {
         <h2 style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(36px, 5vw, 58px)",
-          fontWeight: 300, lineHeight: 1.15,
+          fontWeight: 400, lineHeight: 1.15,
           color: "var(--dark)", marginBottom: "16px",
         }}>
           El Yapımı <em style={{ fontStyle: "italic", color: "var(--gold)" }}>Tasarımlar</em>
         </h2>
         <p style={{
           fontFamily: "'Jost', sans-serif", fontSize: "13px",
-          color: "var(--brown-light)", fontWeight: 300,
+          color: "var(--brown)", fontWeight: 400,
           maxWidth: "480px", margin: "0 auto", lineHeight: 1.8,
         }}>
           Beğendiğiniz tasarım için WhatsApp üzerinden bizimle iletişime geçin,
@@ -272,7 +272,7 @@ export default function Gallery() {
               fontWeight: 400, border: "1px solid",
               borderColor: activeCategory === cat.id ? "var(--dark)" : "var(--gold-light)",
               background: activeCategory === cat.id ? "var(--dark)" : "transparent",
-              color: activeCategory === cat.id ? "var(--gold)" : "var(--brown-light)",
+              color: activeCategory === cat.id ? "var(--gold-dark)" : "var(--brown)",
               cursor: "pointer", transition: "all 0.3s ease",
               position: "relative", overflow: "hidden",
             }}
@@ -306,8 +306,8 @@ export default function Gallery() {
         <div style={{
           textAlign: "center", padding: "80px 0",
           fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "22px", fontWeight: 300,
-          color: "var(--brown-light)",
+          fontSize: "22px", fontWeight: 400,
+          color: "var(--brown)",
         }}>
           Bu kategoride henüz pasta eklenmemiş.
         </div>

@@ -88,7 +88,7 @@ export default function Navbar() {
             display: "flex", alignItems: "center", gap: "10px",
           }}
         >
-          <img src="/images/logo.png" alt="Litros Cake House" style={{ height: "clamp(56px, 8vw, 110px)", width: "auto", objectFit: "contain", opacity: menuOpen ? 0 : 1, pointerEvents: menuOpen ? "none" : "auto", transition: "opacity 0.2s" }} />
+          <img src="/images/logo.png" alt="Litros Cake House" style={{ height: "clamp(64px, 9vw, 120px)", width: "auto", objectFit: "contain", opacity: menuOpen ? 0 : 1, pointerEvents: menuOpen ? "none" : "auto", transition: "opacity 0.2s", filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.08))" }} />
         </Motion.a>
 
         {/* Desktop Links */}

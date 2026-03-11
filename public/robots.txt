@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://litroscake.com.tr/sitemap.xml

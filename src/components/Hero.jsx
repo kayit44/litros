@@ -105,9 +105,9 @@ export default function Hero() {
         {/* Eyebrow */}
         <Motion.p variants={itemVariants} style={{
           display: "flex", alignItems: "center", gap: "14px",
-          fontSize: "10px", letterSpacing: "4px",
-          textTransform: "uppercase", color: "var(--gold)",
-          fontWeight: 400, marginBottom: "24px",
+          fontSize: "11px", letterSpacing: "4px",
+          textTransform: "uppercase", color: "var(--gold-dark)",
+          fontWeight: 500, marginBottom: "24px",
           fontFamily: "'Jost', sans-serif",
         }}>
           <span style={{
@@ -121,7 +121,7 @@ export default function Hero() {
         <Motion.h1 variants={itemVariants} style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(48px, 6vw, 86px)",
-          fontWeight: 300, lineHeight: 1.08,
+          fontWeight: 400, lineHeight: 1.08,
           color: "var(--dark)", marginBottom: "28px",
           letterSpacing: "-0.5px",
         }}>
@@ -135,7 +135,7 @@ export default function Hero() {
         <Motion.p variants={itemVariants} style={{
           fontFamily: "'Jost', sans-serif",
           fontSize: "14px", lineHeight: 1.9,
-          color: "var(--brown-light)", fontWeight: 300,
+          color: "var(--brown)", fontWeight: 400,
           maxWidth: "380px", marginBottom: "48px",
           letterSpacing: "0.3px",
         }}>
@@ -210,7 +210,7 @@ export default function Hero() {
           }}
         >
           {[
-            { num: "100+", label: "Mutlu Müşteri" },
+            { num: "200+", label: "Mutlu Müşteri" },
             { num: "5 ★",  label: "Ortalama Puan" },
             { num: "100%", label: "El Yapımı" },
           ].map((stat, i) => (
