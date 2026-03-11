@@ -24,7 +24,7 @@ export default function FloatingWhatsApp() {
     const onScroll = () => {
       const scrolled = window.scrollY + window.innerHeight;
       const total    = document.documentElement.scrollHeight;
-      if (scrolled / total > 0.70 && !bubble && !dismissed) setBubble(true);
+      if (scrolled / total > 0.88 && !bubble && !dismissed) setBubble(true);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

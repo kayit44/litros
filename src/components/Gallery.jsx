@@ -85,7 +85,7 @@ function CakeCard({ cake, index }) {
           transition={{ duration: 0.4, delay: 0.08 }}
           style={{
             fontFamily: "'Cormorant Garamond', serif", fontSize: "24px",
-            fontWeight: 300, color: "var(--white)", marginBottom: "10px", lineHeight: 1.2,
+            fontWeight: 400, color: "var(--white)", marginBottom: "10px", lineHeight: 1.2,
           }}
         >
           {cake.title}
@@ -97,7 +97,7 @@ function CakeCard({ cake, index }) {
           style={{
             fontFamily: "'Jost', sans-serif", fontSize: "12px",
             lineHeight: 1.7, color: "rgba(249,243,234,0.75)",
-            fontWeight: 300, marginBottom: "18px",
+            fontWeight: 400, marginBottom: "18px",
           }}
         >
           {cake.description}
@@ -270,9 +270,9 @@ export default function Gallery() {
               fontFamily: "'Jost', sans-serif", fontSize: "10px",
               letterSpacing: "2px", textTransform: "uppercase",
               fontWeight: 400, border: "1px solid",
-              borderColor: activeCategory === cat.id ? "var(--dark)" : "var(--gold-light)",
-              background: activeCategory === cat.id ? "var(--dark)" : "transparent",
-              color: activeCategory === cat.id ? "var(--gold-dark)" : "var(--brown)",
+              borderColor: activeCategory === cat.id ? "var(--gold)" : "var(--gold-light)",
+              background: activeCategory === cat.id ? "var(--gold)" : "transparent",
+              color: activeCategory === cat.id ? "#fff" : "var(--brown)",
               cursor: "pointer", transition: "all 0.3s ease",
               position: "relative", overflow: "hidden",
             }}
@@ -282,7 +282,7 @@ export default function Gallery() {
                 layoutId="filterBg"
                 style={{
                   position: "absolute", inset: 0,
-                  background: "var(--dark)", zIndex: -1,
+                  background: "var(--gold)", zIndex: -1,
                 }}
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
@@ -341,13 +341,13 @@ export default function Gallery() {
           <p style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: "clamp(20px, 3vw, 28px)",
-            fontWeight: 300, color: "var(--cream)", marginBottom: "6px",
+            fontWeight: 400, color: "var(--cream)", marginBottom: "6px",
           }}>
             Hayalinizdeki pastayı birlikte tasarlayalım.
           </p>
           <p style={{
             fontFamily: "'Jost', sans-serif", fontSize: "12px",
-            color: "rgba(232,213,176,0.6)", fontWeight: 300, letterSpacing: "0.5px",
+            color: "rgba(232,213,176,0.6)", fontWeight: 400, letterSpacing: "0.5px",
           }}>
             Her pasta tamamen özel sipariş üzerine hazırlanır.
           </p>
