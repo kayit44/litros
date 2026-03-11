@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion as Motion, useScroll, useTransform } from "framer-motion";
 import { supabase } from "../lib/supabase";
 
-const WA_NUMBER  = "905324224244";
+const WA_NUMBER  = "905XXXXXXXXX";
 const WA_MESSAGE = "Merhaba, pasta siparişi hakkında bilgi almak istiyorum.";
 const WA_URL     = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
@@ -65,7 +65,28 @@ export default function Hero() {
         background: "var(--cream)",
       }}
     >
-  
+      {/* ── Dekoratif arka plan yazı ───────────────────────── */}
+      <Motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 1.5 }}
+        style={{
+          position: "absolute",
+          bottom: "-40px", left: "50%",
+          transform: "translateX(-50%)",
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(80px, 14vw, 200px)",
+          fontWeight: 400,
+          color: "rgba(201,169,110,0.055)",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+          userSelect: "none",
+          zIndex: 0,
+          letterSpacing: "2px",
+        }}
+      >
+        CAKE HOUSE
+      </Motion.div>
 
       {/* ── Sol: Metin ─────────────────────────────────────── */}
       <Motion.div
@@ -83,7 +104,7 @@ export default function Hero() {
         {/* Eyebrow */}
         <Motion.p variants={itemVariants} style={{
           display: "flex", alignItems: "center", gap: "14px",
-          fontSize: "11px", letterSpacing: "4px",
+          fontSize: "13px", letterSpacing: "2px",
           textTransform: "uppercase", color: "var(--gold-dark)",
           fontWeight: 500, marginBottom: "24px",
           fontFamily: "'Jost', sans-serif",
@@ -112,7 +133,7 @@ export default function Hero() {
         {/* Alt başlık */}
         <Motion.p variants={itemVariants} style={{
           fontFamily: "'Jost', sans-serif",
-          fontSize: "14px", lineHeight: 1.9,
+          fontSize: "16px", lineHeight: 1.9,
           color: "var(--brown)", fontWeight: 400,
           maxWidth: "380px", marginBottom: "48px",
           letterSpacing: "0.3px",
@@ -140,7 +161,7 @@ export default function Hero() {
               padding: "15px 40px",
               background: "var(--dark)", color: "var(--cream)",
               fontFamily: "'Jost', sans-serif",
-              fontSize: "11px", letterSpacing: "2.5px",
+              fontSize: "11px", letterSpacing: "1px",
               textTransform: "uppercase", fontWeight: 400,
               textDecoration: "none",
               transition: "background 0.3s",
@@ -287,7 +308,7 @@ export default function Hero() {
             </div>
             <div style={{
               fontFamily: "'Jost', sans-serif",
-              fontSize: "9px", letterSpacing: "2.5px",
+              fontSize: "9px", letterSpacing: "1px",
               textTransform: "uppercase",
               color: "var(--gold-light)",
               marginTop: "6px",
@@ -395,7 +416,7 @@ export default function Hero() {
           ]).flat().map((text, i) => (
             <span key={i} style={{
               fontFamily: "'Jost', sans-serif",
-              fontSize: "10px", letterSpacing: "3.5px",
+              fontSize: "10px", letterSpacing: "1px",
               textTransform: "uppercase",
               color: i % 7 === 0 ? "var(--gold)" : "rgba(232,213,176,0.5)",
               whiteSpace: "nowrap",

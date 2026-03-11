@@ -109,7 +109,7 @@ export default function About() {
                 fontSize: "40px", fontWeight: 500, color: "var(--gold)", lineHeight: 1,
               }}>5+</div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "13px",
+                fontFamily: "'Jost', sans-serif", fontSize: "14px",
                 letterSpacing: "1px", textTransform: "uppercase",
                 color: "var(--gold-light)", marginTop: "6px",
               }}>Yıllık Tecrübe</div>
@@ -131,12 +131,12 @@ export default function About() {
             <span style={{ fontSize: "24px" }}>🌿</span>
             <div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "14px",
-                fontWeight: 500, color: "var(--dark)", letterSpacing: "0.3px",
+                fontFamily: "'Jost', sans-serif", fontSize: "15px",
+                fontWeight: 500, color: "var(--dark)", letterSpacing: "0.2px",
               }}>Doğal Malzeme</div>
               <div style={{
-                fontFamily: "'Jost', sans-serif", fontSize: "12px",
-                letterSpacing: "1px", textTransform: "uppercase",
+                fontFamily: "'Jost', sans-serif", fontSize: "13px",
+                letterSpacing: "0.5px", textTransform: "uppercase",
                 color: "var(--brown)", marginTop: "2px",
               }}>Katkısız · Taze · Özenli</div>
             </div>
@@ -213,8 +213,8 @@ export default function About() {
                 transition={{ type: "spring", stiffness: 300 }}
                 style={{
                   display: "flex", alignItems: "center", gap: "10px",
-                  fontFamily: "'Jost', sans-serif", fontSize: "14px",
-                  letterSpacing: "0.5px", color: "var(--dark)", fontWeight: 500,
+                  fontFamily: "'Jost', sans-serif", fontSize: "15px",
+                  letterSpacing: "0.3px", color: "var(--dark)", fontWeight: 500,
                 }}
               >
                 <span style={{ color: "var(--gold)", fontSize: "10px", flexShrink: 0 }}>✦</span>

@@ -73,7 +73,7 @@ function CakeCard({ cake, index }) {
           animate={{ y: hovered ? 0 : 12, opacity: hovered ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
           style={{
-            fontFamily: "'Jost', sans-serif", fontSize: "9px",
+            fontFamily: "'Jost', sans-serif", fontSize: "13px",
             letterSpacing: "3px", textTransform: "uppercase",
             color: "var(--gold)", marginBottom: "8px",
           }}
@@ -96,8 +96,8 @@ function CakeCard({ cake, index }) {
           animate={{ y: hovered ? 0 : 16, opacity: hovered ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.11 }}
           style={{
-            fontFamily: "'Jost', sans-serif", fontSize: "12px",
-            lineHeight: 1.7, color: "rgba(249,243,234,0.75)",
+            fontFamily: "'Jost', sans-serif", fontSize: "14px",
+            lineHeight: 1.7, color: "rgba(249,243,234,0.95)",
             fontWeight: 400, marginBottom: "18px",
           }}
         >
@@ -111,8 +111,8 @@ function CakeCard({ cake, index }) {
         >
           {cake.tags.map((tag) => (
             <span key={tag} style={{
-              fontFamily: "'Jost', sans-serif", fontSize: "9px",
-              letterSpacing: "1.5px", textTransform: "uppercase",
+              fontFamily: "'Jost', sans-serif", fontSize: "12px",
+              letterSpacing: "1px", textTransform: "uppercase",
               padding: "4px 10px",
               border: "1px solid rgba(201,169,110,0.4)",
               color: "var(--gold-light)",
@@ -132,7 +132,7 @@ function CakeCard({ cake, index }) {
             display: "flex", alignItems: "center",
             justifyContent: "center", gap: "8px",
             padding: "12px 20px", background: "var(--gold)", color: "white",
-            fontFamily: "'Jost', sans-serif", fontSize: "10px",
+            fontFamily: "'Jost', sans-serif", fontSize: "13px",
             letterSpacing: "2px", textTransform: "uppercase",
             fontWeight: 500, border: "none", cursor: "pointer",
             width: "100%",
@@ -150,8 +150,8 @@ function CakeCard({ cake, index }) {
           style={{
             position: "absolute", top: "16px", left: "16px",
             background: "var(--gold)", padding: "5px 12px",
-            fontFamily: "'Jost', sans-serif", fontSize: "8px",
-            letterSpacing: "2.5px", textTransform: "uppercase",
+            fontFamily: "'Jost', sans-serif", fontSize: "13px",
+            letterSpacing: "1px", textTransform: "uppercase",
             color: "var(--dark)", fontWeight: 500, zIndex: 2,
           }}
         >
@@ -263,7 +263,7 @@ export default function Gallery() {
             whileTap={{ scale: 0.96 }}
             style={{
               padding: "10px 26px",
-              fontFamily: "'Jost', sans-serif", fontSize: "10px",
+              fontFamily: "'Jost', sans-serif", fontSize: "13px",
               letterSpacing: "2px", textTransform: "uppercase",
               fontWeight: 400, border: "1px solid",
               borderColor: activeCategory === cat.id ? "var(--gold)" : "var(--gold-light)",
@@ -293,7 +293,7 @@ export default function Gallery() {
         <div style={{
           textAlign: "center", padding: "80px 0",
           fontFamily: "'Jost', sans-serif",
-          fontSize: "11px", letterSpacing: "3px",
+          fontSize: "14px", letterSpacing: "3px",
           textTransform: "uppercase", color: "var(--gold)",
         }}>
           Yükleniyor...
@@ -342,7 +342,7 @@ export default function Gallery() {
             Hayalinizdeki pastayı birlikte tasarlayalım.
           </p>
           <p style={{
-            fontFamily: "'Jost', sans-serif", fontSize: "12px",
+            fontFamily: "'Jost', sans-serif", fontSize: "14px",
             color: "rgba(232,213,176,0.6)", fontWeight: 400, letterSpacing: "0.5px",
           }}>
             Her pasta tamamen özel sipariş üzerine hazırlanır.
@@ -357,7 +357,7 @@ export default function Gallery() {
           style={{
             display: "flex", alignItems: "center", gap: "10px",
             padding: "15px 36px", background: "#25D366", color: "white",
-            fontFamily: "'Jost', sans-serif", fontSize: "11px",
+            fontFamily: "'Jost', sans-serif", fontSize: "14px",
             letterSpacing: "2px", textTransform: "uppercase",
             fontWeight: 500, textDecoration: "none", flexShrink: 0,
           }}
