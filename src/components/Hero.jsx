@@ -253,20 +253,22 @@ export default function Hero() {
         <Motion.div
           style={{
             width: "100%", height: "100%",
-            minHeight: "100vh",
             overflow: "hidden",
           }}
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.6 }}
         >
           <Motion.img
-            src={heroImg?.image || "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=85"}
+            src={heroImg?.image || "/images/rustic-romance.jpg"}
             alt="Litros Cake House Featured Cake"
             style={{
               width: "100%", height: "100%",
+              minHeight: "100vh",
               objectFit: "cover",
+              objectPosition: "center",
               display: "block",
             }}
+            onError={(e) => { e.target.src = "/images/rustic-romance.jpg"; }}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
