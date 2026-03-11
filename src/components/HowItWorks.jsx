@@ -10,29 +10,25 @@ const steps = [
     number: "01",
     icon: "💬",
     title: "Bize Ulaşın",
-    description:
-      "WhatsApp üzerinden bizimle iletişime geçin. Hayalinizdeki pastayı anlatın; tema, renk, kişi sayısı ve tarih bilgilerini paylaşın.",
+    description: "WhatsApp üzerinden bizimle iletişime geçin. Hayalinizdeki pastayı anlatın; tema, renk, kişi sayısı ve tarih bilgilerini paylaşın.",
   },
   {
     number: "02",
     icon: "✏️",
     title: "Tasarım Belirlenir",
-    description:
-      "Sizinle birebir görüşerek pastanızın tasarımını oluştururuz. İsteklerinize göre özel konsept ve sunum seçenekleri sunulur.",
+    description: "Sizinle birebir görüşerek pastanızın tasarımını oluştururuz. İsteklerinize göre özel konsept ve sunum seçenekleri sunulur.",
   },
   {
     number: "03",
     icon: "🎂",
     title: "Özenle Hazırlanır",
-    description:
-      "Pastanız en taze malzemelerle, el yapımı tekniklerle özenle hazırlanır. Her detay titizlikle işlenir.",
+    description: "Pastanız en taze malzemelerle, el yapımı tekniklerle özenle hazırlanır. Her detay titizlikle işlenir.",
   },
   {
     number: "04",
     icon: "🎁",
     title: "Teslim Edilir",
-    description:
-      "Belirlenen tarih ve saatte pastanız soğuk zincir korunarak güvenle teslim edilir. Özel günününüz kutlu olsun!",
+    description: "Belirlenen tarih ve saatte pastanız soğuk zincir korunarak güvenle teslim edilir. Özel günününüz kutlu olsun!",
   },
 ];
 
@@ -51,51 +47,34 @@ export default function HowItWorks() {
         overflow: "hidden",
       }}
     >
-
       {/* ── Başlık ─────────────────────────────────────────── */}
       <Motion.div
         initial={{ opacity: 0, y: 32 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
-        style={{
-          textAlign: "center",
-          marginBottom: "80px",
-          position: "relative",
-          zIndex: 2,
-        }}
+        style={{ textAlign: "center", marginBottom: "80px", position: "relative", zIndex: 2 }}
       >
-        <p
-          className="section-eyebrow"
-          style={{ justifyContent: "center", color: "var(--gold)" }}
-        >
+        <p className="section-eyebrow" style={{ justifyContent: "center", color: "var(--gold)" }}>
           Sipariş Süreci
         </p>
-        <h2
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(36px, 5vw, 58px)",
-            fontWeight: 300,
-            lineHeight: 1.15,
-            color: "var(--cream)",
-            marginBottom: "16px",
-          }}
-        >
+        <h2 style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "clamp(32px, 5vw, 58px)",
+          fontWeight: 500, lineHeight: 1.15,
+          color: "var(--cream)", marginBottom: "16px",
+        }}>
           Nasıl{" "}
-          <em style={{ fontStyle: "italic", color: "var(--gold)" }}>
-            Çalışır?
-          </em>
+          <em style={{ fontStyle: "italic", color: "var(--gold)" }}>Çalışır?</em>
         </h2>
-        <p
-          style={{
-            fontFamily: "'Jost', sans-serif",
-            fontSize: "13px",
-            color: "rgba(232,213,176,0.85)",
-            fontWeight: 300,
-            maxWidth: "440px",
-            margin: "0 auto",
-            lineHeight: 1.8,
-          }}
-        >
+        <p style={{
+          fontFamily: "'Jost', sans-serif",
+          fontSize: "15px",
+          color: "rgba(253,246,240,0.9)",
+          fontWeight: 400,
+          maxWidth: "440px",
+          margin: "0 auto",
+          lineHeight: 1.8,
+        }}>
           Sipariş vermek çok kolay. Sadece 4 adımda hayalinizdeki pasta hazır!
         </p>
 
@@ -104,42 +83,32 @@ export default function HowItWorks() {
           animate={isInView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
           style={{
-            width: "60px",
-            height: "1px",
-            background:
-              "linear-gradient(to right, transparent, var(--gold), transparent)",
+            width: "60px", height: "1px",
+            background: "linear-gradient(to right, transparent, var(--gold), transparent)",
             margin: "24px auto 0",
           }}
         />
       </Motion.div>
 
       {/* ── Adımlar ────────────────────────────────────────── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "clamp(24px, 4vw, 40px)",
-          maxWidth: "1100px",
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 2,
-        }}
-      >
-        {/* Bağlantı çizgisi (sadece desktop) */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+        gap: "clamp(24px, 4vw, 40px)",
+        maxWidth: "1100px",
+        margin: "0 auto",
+        position: "relative",
+        zIndex: 2,
+      }}>
         <Motion.div
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : {}}
           transition={{ duration: 1.2, delay: 0.6, ease: "easeInOut" }}
           style={{
-            position: "absolute",
-            top: "48px",
-            left: "12%",
-            right: "12%",
+            position: "absolute", top: "48px", left: "12%", right: "12%",
             height: "1px",
-            background:
-              "linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent)",
-            transformOrigin: "left",
-            zIndex: 0,
+            background: "linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent)",
+            transformOrigin: "left", zIndex: 0,
           }}
           className="steps-line"
         />
@@ -149,76 +118,38 @@ export default function HowItWorks() {
             key={step.number}
             initial={{ opacity: 0, y: 48 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 0.7,
-              delay: 0.2 + i * 0.15,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
+            transition={{ duration: 0.7, delay: 0.2 + i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             whileHover={{ y: -8 }}
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              padding: "40px 28px",
+              display: "flex", flexDirection: "column", alignItems: "center",
+              textAlign: "center", padding: "40px 28px",
               background: "rgba(255,253,249,0.03)",
               border: "1px solid rgba(201,169,110,0.12)",
-              position: "relative",
-              zIndex: 1,
+              position: "relative", zIndex: 1,
               transition: "border-color 0.3s, background 0.3s",
               cursor: "default",
-            }}
-            onHoverStart={(e) => {
-              e.target.style &&
-                (e.target.style.borderColor = "rgba(201,169,110,0.35)");
-            }}
-            onHoverEnd={(e) => {
-              e.target.style &&
-                (e.target.style.borderColor = "rgba(201,169,110,0.12)");
             }}
           >
             {/* Numara */}
             <Motion.div
               initial={{ scale: 0, rotate: -15 }}
               animate={isInView ? { scale: 1, rotate: 0 } : {}}
-              transition={{
-                duration: 0.5,
-                delay: 0.3 + i * 0.15,
-                ease: "backOut",
-              }}
+              transition={{ duration: 0.5, delay: 0.3 + i * 0.15, ease: "backOut" }}
               style={{
-                width: "64px",
-                height: "64px",
-                borderRadius: "50%",
+                width: "64px", height: "64px", borderRadius: "50%",
                 border: "1px solid var(--gold)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: "24px",
                 background: "rgba(201,169,110,0.08)",
                 position: "relative",
               }}
             >
-              {/* Dönen halka animasyonu */}
-              <Motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                style={{
-                  position: "absolute",
-                  inset: "-6px",
-                  borderRadius: "50%",
-                  border: "1px dashed rgba(201,169,110,0.3)",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "20px",
-                  fontWeight: 300,
-                  color: "var(--gold)",
-                  lineHeight: 1,
-                }}
-              >
+
+              <span style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "20px", fontWeight: 500,
+                color: "var(--gold)", lineHeight: 1,
+              }}>
                 {step.number}
               </span>
             </Motion.div>
@@ -226,42 +157,29 @@ export default function HowItWorks() {
             {/* İkon */}
             <Motion.div
               animate={{ y: [0, -5, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 3 + i * 0.5,
-                ease: "easeInOut",
-                delay: i * 0.4,
-              }}
+              transition={{ repeat: Infinity, duration: 3 + i * 0.5, ease: "easeInOut", delay: i * 0.4 }}
               style={{ fontSize: "32px", marginBottom: "16px" }}
             >
               {step.icon}
             </Motion.div>
 
             {/* Başlık */}
-            <h3
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "22px",
-                fontWeight: 400,
-                color: "var(--cream)",
-                marginBottom: "12px",
-                lineHeight: 1.2,
-              }}
-            >
+            <h3 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(18px, 3vw, 22px)",
+              fontWeight: 500, color: "var(--cream)",
+              marginBottom: "12px", lineHeight: 1.2,
+            }}>
               {step.title}
             </h3>
 
             {/* Açıklama */}
-            <p
-              style={{
-                fontFamily: "'Jost', sans-serif",
-                fontSize: "13px",
-                lineHeight: 1.8,
-                color: "rgba(232,213,176,0.85)",
-
-                fontWeight: 300,
-              }}
-            >
+            <p style={{
+              fontFamily: "'Jost', sans-serif",
+              fontSize: "15px", lineHeight: 1.8,
+              color: "rgba(253,246,240,0.9)",
+              fontWeight: 400,
+            }}>
               {step.description}
             </p>
           </Motion.div>
@@ -273,23 +191,15 @@ export default function HowItWorks() {
         initial={{ opacity: 0, y: 32 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, delay: 0.9 }}
-        style={{
-          textAlign: "center",
-          marginTop: "72px",
-          position: "relative",
-          zIndex: 2,
-        }}
+        style={{ textAlign: "center", marginTop: "72px", position: "relative", zIndex: 2 }}
       >
-        <p
-          style={{
-            fontFamily: "'Jost', sans-serif",
-            fontSize: "11px",
-            letterSpacing: "2px",
-            textTransform: "uppercase",
-            color: "rgba(232,213,176,0.4)",
-            marginBottom: "24px",
-          }}
-        >
+        <p style={{
+          fontFamily: "'Jost', sans-serif",
+          fontSize: "13px", letterSpacing: "2px",
+          textTransform: "uppercase",
+          color: "rgba(253,246,240,0.6)",
+          marginBottom: "24px", fontWeight: 400,
+        }}>
           Hemen başlayalım
         </p>
 
@@ -297,24 +207,14 @@ export default function HowItWorks() {
           href={WA_URL}
           target="_blank"
           rel="noopener noreferrer"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 12px 40px rgba(37,211,102,0.3)",
-          }}
+          whileHover={{ scale: 1.05, boxShadow: "0 12px 40px rgba(37,211,102,0.3)" }}
           whileTap={{ scale: 0.97 }}
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "12px",
-            padding: "18px 48px",
-            background: "#25D366",
-            color: "white",
-            fontFamily: "'Jost', sans-serif",
-            fontSize: "11px",
-            letterSpacing: "2.5px",
-            textTransform: "uppercase",
-            fontWeight: 500,
-            textDecoration: "none",
+            display: "inline-flex", alignItems: "center", gap: "12px",
+            padding: "18px 48px", background: "#25D366", color: "white",
+            fontFamily: "'Jost', sans-serif", fontSize: "13px",
+            letterSpacing: "2px", textTransform: "uppercase",
+            fontWeight: 500, textDecoration: "none",
             boxShadow: "0 8px 32px rgba(37,211,102,0.2)",
           }}
         >
@@ -329,16 +229,13 @@ export default function HowItWorks() {
           WhatsApp ile Sipariş Ver
         </Motion.a>
 
-        <p
-          style={{
-            fontFamily: "'Jost', sans-serif",
-            fontSize: "11px",
-            color: "rgba(232,213,176,0.3)",
-            marginTop: "16px",
-            fontWeight: 300,
-            letterSpacing: "0.5px",
-          }}
-        >
+        <p style={{
+          fontFamily: "'Jost', sans-serif",
+          fontSize: "13px",
+          color: "rgba(253,246,240,0.5)",
+          marginTop: "16px", fontWeight: 400,
+          letterSpacing: "0.3px",
+        }}>
           Genellikle birkaç dakika içinde yanıt veriyoruz.
         </p>
       </Motion.div>

@@ -4,16 +4,14 @@
 
 /* ─── CSS Variables ─────────────────────────────────────── */
 :root {
-  /* ── Zemin & Metin ── */
   --cream:       #F9EDE6;
   --cream-dark:  #EED8CE;
   --dark:        #1A0A0F;
-  --brown:       #2E1219;   /* ana metin — çok koyu */
-  --brown-light: #5A2D38;   /* ikincil metin */
+  --brown:       #2E1219;
+  --brown-light: #5A2D38;
   --white:       #FFFBF9;
-  --text: #14070B;  /* en koyu metin */
+  --text:        #14070B;
 
-  /* ── Pembe tonlar — daha doygun ── */
   --gold:        #B8405C;
   --gold-light:  #D4728A;
   --gold-dark:   #8C2040;
@@ -52,16 +50,8 @@ h1, h2, h3, h4 {
 }
 
 /* ─── Typography ────────────────────────────────────────── */
-.font-display {
-  font-family: 'Cormorant Garamond', serif;
-}
-
-.font-body {
-  font-family: 'Jost', sans-serif;
-}
-
-/* ─── Custom Cursor ─────────────────────────────────────── */
-/* Normal sistem imleci kullanılıyor */
+.font-display { font-family: 'Cormorant Garamond', serif; }
+.font-body    { font-family: 'Jost', sans-serif; }
 
 /* ─── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { display: none; }
@@ -91,31 +81,25 @@ body::after {
   transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal.visible       { opacity: 1; transform: translateY(0); }
+.reveal-delay-1       { transition-delay: 0.1s; }
+.reveal-delay-2       { transition-delay: 0.2s; }
+.reveal-delay-3       { transition-delay: 0.3s; }
+.reveal-delay-4       { transition-delay: 0.4s; }
+.reveal-delay-5       { transition-delay: 0.5s; }
 
 /* ─── Section Label ─────────────────────────────────────── */
 .section-eyebrow {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 10px;
-  letter-spacing: 4px;
+  font-size: 11px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--gold);
-  font-weight: 400;
+  font-weight: 500;
   margin-bottom: 20px;
 }
-
 .section-eyebrow::before {
   content: '';
   display: block;
@@ -133,15 +117,14 @@ body::after {
   background: var(--dark);
   color: var(--cream);
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2.5px;
+  font-size: 13px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
   border: 1.5px solid var(--dark);
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
-
 .btn-primary:hover {
   background: transparent;
   color: var(--dark);
@@ -155,15 +138,14 @@ body::after {
   background: transparent;
   color: var(--dark);
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2.5px;
+  font-size: 13px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
   border: 1.5px solid var(--gold);
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
-
 .btn-outline:hover {
   background: var(--gold);
   color: var(--white);
@@ -179,7 +161,7 @@ body::after {
   background: #25D366;
   color: white;
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 500;
@@ -187,11 +169,10 @@ body::after {
   border: 1.5px solid #25D366;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .btn-whatsapp:hover {
   background: #1ebe5a;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 8px 24px rgba(37,211,102,0.3);
 }
 
 /* ─── Gold Divider ──────────────────────────────────────── */
@@ -207,20 +188,14 @@ body::after {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-
-.marquee-track {
-  animation: marquee 90s linear infinite;
-}
+.marquee-track { animation: marquee 90s linear infinite; }
 
 /* ─── Float Animation ───────────────────────────────────── */
 @keyframes floatY {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-10px); }
 }
-
-.float-anim {
-  animation: floatY 4s ease-in-out infinite;
-}
+.float-anim { animation: floatY 4s ease-in-out infinite; }
 
 /* ─── Scroll Line Animation ─────────────────────────────── */
 @keyframes scrollDown {
@@ -229,30 +204,18 @@ body::after {
   51%  { transform: scaleY(1); transform-origin: bottom; }
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
-
-.scroll-line {
-  animation: scrollDown 2s ease-in-out infinite;
-}
+.scroll-line { animation: scrollDown 2s ease-in-out infinite; }
 
 /* ─── Image Hover Zoom ──────────────────────────────────── */
-.img-zoom-wrap {
-  overflow: hidden;
-}
+.img-zoom-wrap { overflow: hidden; }
+.img-zoom-wrap img { transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.img-zoom-wrap:hover img { transform: scale(1.06); }
 
-.img-zoom-wrap img {
-  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.img-zoom-wrap:hover img {
-  transform: scale(1.06);
-}
-
-/* ─── Gold Shimmer (decorative text) ───────────────────── */
+/* ─── Gold Shimmer ──────────────────────────────────────── */
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
-
 .gold-shimmer {
   background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
   background-size: 200% auto;
@@ -262,59 +225,26 @@ body::after {
   animation: shimmer 4s linear infinite;
 }
 
-/* ─── Global Cursor Fix ─────────────────────────────────────── */
-a, button, [role='button'] {
-  cursor: pointer;
-}
+/* ─── Cursor ────────────────────────────────────────────── */
+a, button, [role='button'] { cursor: pointer; }
 
-
-/* ─────────────────────────────
-   MOBILE TYPOGRAPHY FIX
-   Sadece mobilde yazıları büyütür
-───────────────────────────── */
-
+/* ─── Mobil Okunabilirlik ────────────────────────────────── */
 @media (max-width: 768px) {
+  body { font-size: 16px; line-height: 1.75; }
 
-  /* Genel paragraf */
   p {
     font-size: 15px !important;
-    line-height: 1.9;
-    letter-spacing: 0.02em;
-    max-width: 95%;
+    line-height: 1.85 !important;
+    letter-spacing: 0.01em;
   }
 
-  /* Küçük açıklama yazıları */
-  p[style*="fontSize: \"13px\""],
-  p[style*="font-size: 13px"] {
-    font-size: 15px !important;
-  }
+  h1 { font-size: clamp(32px, 8vw, 44px) !important; line-height: 1.2; }
+  h2 { font-size: clamp(26px, 6vw, 36px) !important; line-height: 1.25; }
+  h3 { font-size: clamp(20px, 5vw, 26px) !important; }
 
-  /* Ana başlıklar */
-  h1 {
-    font-size: 40px !important;
-    line-height: 1.2;
-  }
+  .section-eyebrow { font-size: 12px; letter-spacing: 2px; }
 
-  h2 {
-    font-size: 32px !important;
-    line-height: 1.25;
-  }
-
-  h3 {
-    font-size: 22px !important;
-  }
-
-  /* Section küçük başlık */
-  .section-eyebrow {
-    font-size: 12px;
-    letter-spacing: 3px;
-  }
-
-  /* Buton yazıları */
   .btn-primary,
   .btn-outline,
-  .btn-whatsapp {
-    font-size: 12px;
-  }
-
+  .btn-whatsapp { font-size: 13px; }
 }
