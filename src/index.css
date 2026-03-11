@@ -266,3 +266,55 @@ body::after {
 a, button, [role='button'] {
   cursor: pointer;
 }
+
+
+/* ─────────────────────────────
+   MOBILE TYPOGRAPHY FIX
+   Sadece mobilde yazıları büyütür
+───────────────────────────── */
+
+@media (max-width: 768px) {
+
+  /* Genel paragraf */
+  p {
+    font-size: 15px !important;
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+    max-width: 95%;
+  }
+
+  /* Küçük açıklama yazıları */
+  p[style*="fontSize: \"13px\""],
+  p[style*="font-size: 13px"] {
+    font-size: 15px !important;
+  }
+
+  /* Ana başlıklar */
+  h1 {
+    font-size: 40px !important;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 32px !important;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-size: 22px !important;
+  }
+
+  /* Section küçük başlık */
+  .section-eyebrow {
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+
+  /* Buton yazıları */
+  .btn-primary,
+  .btn-outline,
+  .btn-whatsapp {
+    font-size: 12px;
+  }
+
+}
