@@ -119,7 +119,7 @@ export default function HowItWorks() {
             initial={{ opacity: 0, y: 48 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 + i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-            whileHover={{ y: -8 }}
+            whileHover={{ y: -8, borderColor: "rgba(201,169,110,0.5)", backgroundColor: "rgba(255,253,249,0.07)" }}
             style={{
               display: "flex", flexDirection: "column", alignItems: "center",
               textAlign: "center", padding: "40px 28px",
@@ -147,7 +147,7 @@ export default function HowItWorks() {
 
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "20px", fontWeight: 500,
+                fontSize: "28px", fontWeight: 500,
                 color: "var(--gold)", lineHeight: 1,
               }}>
                 {step.number}

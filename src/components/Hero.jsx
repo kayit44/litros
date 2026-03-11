@@ -323,6 +323,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.8, x: -20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ delay: 1.2, duration: 0.6, ease: "backOut" }}
+          className="hero-badge-card"
           style={{
             position: "absolute", bottom: "clamp(60px, 8vw, 80px)", left: "-16px",
             background: "var(--white)",
@@ -350,7 +351,7 @@ export default function Hero() {
             </div>
             <div style={{
               fontFamily: "'Jost', sans-serif",
-              fontSize: "9px", letterSpacing: "2px",
+              fontSize: "13px", letterSpacing: "1px",
               textTransform: "uppercase",
               color: "var(--brown)",
               marginTop: "4px",
