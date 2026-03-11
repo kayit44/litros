@@ -5,18 +5,18 @@
 /* ─── CSS Variables ─────────────────────────────────────── */
 :root {
   /* ── Zemin & Metin ── */
-  --cream:       #FAF0EB;
-  --cream-dark:  #F2E0D8;
+  --cream:       #F9EDE6;
+  --cream-dark:  #EED8CE;
   --dark:        #1A0A0F;
-  --brown:       #3A1D25;
-  --brown-light: #6A3D4A;
+  --brown:       #2E1219;   /* ana metin — çok koyu */
+  --brown-light: #5A2D38;   /* ikincil metin */
   --white:       #FFFBF9;
-  --text:        #2E1219;   /* daha koyu — daha iyi okunabilirlik */
+  --text:        #1A0A0F;   /* en koyu metin */
 
-  /* ── Pembe tonlar ── */
-  --gold:        #C45A72;   /* daha doygun pembe */
-  --gold-light:  #E08AA0;   /* orta pembe */
-  --gold-dark:   #9E3050;   /* koyu pembe */
+  /* ── Pembe tonlar — daha doygun ── */
+  --gold:        #B8405C;
+  --gold-light:  #D4728A;
+  --gold-dark:   #8C2040;
 }
 
 /* ─── Base ──────────────────────────────────────────────── */
@@ -40,6 +40,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
   letter-spacing: 0.01em;
+}
+
+p, span, li, a {
+  font-weight: 400;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 500;
+  color: var(--dark);
 }
 
 /* ─── Typography ────────────────────────────────────────── */
