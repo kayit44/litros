@@ -188,7 +188,7 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
               style={{
                 fontFamily: "'Jost', sans-serif", fontSize: "14px",
-                lineHeight: 1.9, color: "var(--brown-light)",
+                lineHeight: 1.9, color: "var(--text)",
                 fontWeight: 300, marginBottom: "16px", letterSpacing: "0.3px",
               }}
             >
