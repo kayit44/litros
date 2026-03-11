@@ -65,28 +65,7 @@ export default function Hero() {
         background: "var(--cream)",
       }}
     >
-      {/* ── Dekoratif arka plan yazı ───────────────────────── */}
-      <Motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1.5 }}
-        style={{
-          position: "absolute",
-          bottom: "-40px", left: "50%",
-          transform: "translateX(-50%)",
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(80px, 14vw, 200px)",
-          fontWeight: 400,
-          color: "rgba(201,169,110,0.055)",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          userSelect: "none",
-          zIndex: 0,
-          letterSpacing: "8px",
-        }}
-      >
-        CAKE HOUSE
-      </Motion.div>
+  
 
       {/* ── Sol: Metin ─────────────────────────────────────── */}
       <Motion.div

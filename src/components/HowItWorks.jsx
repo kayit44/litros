@@ -51,28 +51,6 @@ export default function HowItWorks() {
         overflow: "hidden",
       }}
     >
-      {/* ── Dekoratif arka plan yazı ───────────────────────── */}
-      <Motion.div
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 2, delay: 0.3 }}
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(100px, 18vw, 260px)",
-          fontWeight: 300,
-          color: "rgba(201,169,110,0.04)",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          userSelect: "none",
-          letterSpacing: "12px",
-        }}
-      >
-        ATÖLYE
-      </Motion.div>
 
       {/* ── Başlık ─────────────────────────────────────────── */}
       <Motion.div
