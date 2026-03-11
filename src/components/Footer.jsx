@@ -82,20 +82,20 @@ export default function Footer() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "22px", fontWeight: 300,
+              fontSize: "22px", fontWeight: 400,
               letterSpacing: "3px", textTransform: "uppercase",
               color: "var(--cream)", textDecoration: "none",
               display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px",
             }}
           >
-            <img src="/images/logo.png" alt="Litros Cake House" style={{ height: "64px", width: "auto", objectFit: "contain", background: "rgba(255,251,249,0.07)", borderRadius: "8px", padding: "4px" }} />
+            <img src="/images/logo.png" alt="Litros Cake House" style={{ height: "72px", width: "auto", objectFit: "contain" }} />
           </a>
 
           <p style={{
             fontFamily: "'Jost', sans-serif",
             fontSize: "13px", lineHeight: 1.85,
             color: "rgba(232,213,176,0.45)",
-            fontWeight: 300, maxWidth: "280px",
+            fontWeight: 400, maxWidth: "280px",
             marginBottom: "28px",
           }}>
             El yapımı butik pastalar. Her sipariş özel, her pasta eşsiz.
@@ -165,7 +165,7 @@ export default function Footer() {
                   transition={{ type: "spring", stiffness: 300 }}
                   style={{
                     fontFamily: "'Jost', sans-serif",
-                    fontSize: "13px", fontWeight: 300,
+                    fontSize: "13px", fontWeight: 400,
                     color: "rgba(232,213,176,0.5)",
                     textDecoration: "none",
                     display: "flex", alignItems: "center", gap: "8px",
@@ -223,7 +223,7 @@ export default function Footer() {
                 </div>
                 <div style={{
                   fontFamily: "'Jost', sans-serif",
-                  fontSize: "12px", fontWeight: 300,
+                  fontSize: "12px", fontWeight: 400,
                 }}>
                   +90 5XX XXX XX XX
                 </div>
@@ -257,9 +257,9 @@ export default function Footer() {
                 </div>
                 <div style={{
                   fontFamily: "'Jost', sans-serif",
-                  fontSize: "12px", fontWeight: 300,
+                  fontSize: "12px", fontWeight: 400,
                 }}>
-                  @litroscakehouse
+                  @litrascakehouse
                 </div>
               </div>
             </Motion.a>
@@ -282,7 +282,7 @@ export default function Footer() {
                 </div>
                 <div style={{
                   fontFamily: "'Jost', sans-serif",
-                  fontSize: "12px", fontWeight: 300,
+                  fontSize: "12px", fontWeight: 400,
                   lineHeight: 1.6,
                 }}>
                   İstanbul, Türkiye
@@ -321,7 +321,7 @@ export default function Footer() {
         <p style={{
           fontFamily: "'Jost', sans-serif",
           fontSize: "11px", color: "rgba(232,213,176,0.25)",
-          fontWeight: 300, letterSpacing: "0.5px",
+          fontWeight: 400, letterSpacing: "0.5px",
         }}>
           © {new Date().getFullYear()} Litros Cake House. Tüm hakları saklıdır.
         </p>
@@ -329,7 +329,7 @@ export default function Footer() {
         <p style={{
           fontFamily: "'Jost', sans-serif",
           fontSize: "11px", color: "rgba(232,213,176,0.25)",
-          fontWeight: 300, letterSpacing: "0.5px",
+          fontWeight: 400, letterSpacing: "0.5px",
           display: "flex", alignItems: "center", gap: "6px",
         }}>
           El yapımı

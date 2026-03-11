@@ -38,10 +38,9 @@ export default function Hero() {
     supabase
       .from("cakes")
       .select("*")
-      .eq("featured", true)
+      .eq("hero", true)
       .limit(1)
-      .single()
-      .then(({ data }) => { if (data) setHeroImg(data); });
+      .then(({ data }) => { if (data && data.length > 0) setHeroImg(data[0]); });
   }, []);
 
   // Parallax scroll efekti
@@ -77,7 +76,7 @@ export default function Hero() {
           transform: "translateX(-50%)",
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(80px, 14vw, 200px)",
-          fontWeight: 300,
+          fontWeight: 400,
           color: "rgba(201,169,110,0.055)",
           whiteSpace: "nowrap",
           pointerEvents: "none",
@@ -182,7 +181,7 @@ export default function Hero() {
               fontFamily: "'Jost', sans-serif",
               fontSize: "12px", color: "var(--brown)",
               textDecoration: "none", letterSpacing: "1px",
-              fontWeight: 300,
+              fontWeight: 400,
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366">
@@ -221,7 +220,7 @@ export default function Hero() {
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: "clamp(26px, 3vw, 36px)",
-                fontWeight: 300, color: "var(--gold)",
+                fontWeight: 400, color: "var(--gold)",
                 lineHeight: 1,
               }}>
                 {stat.num}
@@ -230,8 +229,8 @@ export default function Hero() {
                 fontFamily: "'Jost', sans-serif",
                 fontSize: "10px", letterSpacing: "2px",
                 textTransform: "uppercase",
-                color: "var(--brown-light)",
-                marginTop: "6px", fontWeight: 300,
+                color: "var(--brown)",
+                marginTop: "6px", fontWeight: 400,
               }}>
                 {stat.label}
               </div>
@@ -287,7 +286,7 @@ export default function Hero() {
           transition={{ delay: 1.0, duration: 0.6, ease: "backOut" }}
           animate2={{ y: [0, -8, 0] }}
           style={{
-            position: "absolute", top: "clamp(80px, 12vw, 120px)", right: "-16px",
+            position: "absolute", top: "clamp(80px, 12vw, 120px)", right: "16px",
             background: "var(--dark)",
             padding: "20px 24px",
             textAlign: "center", zIndex: 3,
@@ -300,7 +299,7 @@ export default function Hero() {
           >
             <div style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "32px", fontWeight: 300,
+              fontSize: "32px", fontWeight: 400,
               color: "var(--gold)", lineHeight: 1,
             }}>
               100%
@@ -351,7 +350,7 @@ export default function Hero() {
               fontFamily: "'Jost', sans-serif",
               fontSize: "9px", letterSpacing: "2px",
               textTransform: "uppercase",
-              color: "var(--brown-light)",
+              color: "var(--brown)",
               marginTop: "4px",
             }}>
               Müşteri Memnuniyeti

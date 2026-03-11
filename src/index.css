@@ -64,10 +64,8 @@ h1, h2, h3, h4 {
 /* Normal sistem imleci kullanılıyor */
 
 /* ─── Scrollbar ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--cream-dark); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
 
 /* ─── Selection ─────────────────────────────────────────── */
 ::selection {
