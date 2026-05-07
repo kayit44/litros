@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import Navbar           from "./components/Navbar";
 import Hero             from "./components/Hero";
@@ -8,8 +8,22 @@ import About            from "./components/About";
 import HowItWorks       from "./components/HowItWorks";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import Footer           from "./components/Footer";
-import AdminPanel       from "./pages/admin/AdminPanel";
+import Dashboard        from "./pages/admin/Dashboard";
+import Login            from "./pages/admin/Login";
 import CakeDetail       from "./pages/CakeDetail";
+import { supabase }     from "./lib/supabase";
+
+function LoadingScreen() {
+  return (
+    <div style={{
+      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      background: "var(--cream)", fontFamily: "'Jost', sans-serif",
+      fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: "var(--gold)",
+    }}>
+      Yükleniyor...
+    </div>
+  );
+}
 
 function Loader({ onComplete }) {
   return (
@@ -74,6 +88,10 @@ function HomePage() {
   const isReturn = !!sessionStorage.getItem('galleryScrollPending');
   const [loading, setLoading] = useState(!isReturn);
 
+  useEffect(() => {
+    document.title = "Litros Cake House · El Yapımı Butik Pastalar";
+  }, []);
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -101,12 +119,45 @@ function HomePage() {
   );
 }
 
+// ── Admin rotası: session yoksa /admin/giris'e yönlendir ─────
+function AdminRoute() {
+  const [session, setSession] = useState(undefined);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => { await supabase.auth.signOut(); };
+
+  if (session === undefined) return <LoadingScreen />;
+  if (!session) return <Navigate to="/admin/giris" replace />;
+  return <Dashboard onLogout={handleLogout} />;
+}
+
+// ── Giriş rotası: zaten giriş yapıldıysa /admin'e yönlendir ─
+function AdminLoginRoute() {
+  const [session, setSession] = useState(undefined);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (session === undefined) return <LoadingScreen />;
+  if (session) return <Navigate to="/admin" replace />;
+  return <Login onLogin={() => {}} />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"       element={<HomePage />} />
-        <Route path="/admin"        element={<AdminPanel />} />
+        <Route path="/"            element={<HomePage />} />
+        <Route path="/admin"       element={<AdminRoute />} />
+        <Route path="/admin/giris" element={<AdminLoginRoute />} />
         <Route path="/pasta/:id"   element={<CakeDetail />} />
       </Routes>
     </BrowserRouter>

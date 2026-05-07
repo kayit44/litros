@@ -13,7 +13,15 @@ const CATEGORIES = [
 const EMPTY_FORM = {
   title: "", subtitle: "", category: "dogum-gunu",
   description: "", tags: "", featured: false, image: "",
+  images: [], sort_order: null,
 };
+
+// Storage'daki görseli URL'den sil
+async function removeFromStorage(url) {
+  if (!url?.includes("/storage/v1/object/public/cake-images/")) return;
+  const filename = url.split("/cake-images/")[1]?.split("?")[0];
+  if (filename) await supabase.storage.from("cake-images").remove([filename]);
+}
 
 export default function Dashboard({ onLogout }) {
   const [cakes,       setCakes]       = useState([]);
@@ -25,35 +33,41 @@ export default function Dashboard({ onLogout }) {
   const [toast,       setToast]       = useState(null);
   const [deleteId,    setDeleteId]    = useState(null);
   const [preview,     setPreview]     = useState(null);
-  const fileRef = useRef();
+  const fileRef      = useRef();
+  const extraFileRef = useRef();
 
   // ── Pastaları yükle ──────────────────────────────────────
   const fetchCakes = async () => {
     setLoading(true);
-    const { data } = await supabase.from("cakes").select("*").order("created_at", { ascending: false });
-    setCakes(data || []);
+    const { data } = await supabase
+      .from("cakes").select("*")
+      .order("sort_order", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: false });
+    // sort_order yoksa index * 10 ata
+    const normalized = (data || []).map((c, i) => ({
+      ...c, sort_order: c.sort_order ?? i * 10,
+    }));
+    setCakes(normalized);
     setLoading(false);
   };
 
   useEffect(() => { fetchCakes(); }, []);
 
-  // ── Toast göster ─────────────────────────────────────────
+  // ── Toast ─────────────────────────────────────────────────
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
   };
 
-  // ── Görsel yükle ─────────────────────────────────────────
+  // ── Ana görsel yükle ─────────────────────────────────────
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
     setPreview(URL.createObjectURL(file));
-
-    const ext      = file.name.split(".").pop();
+    const ext = file.name.split(".").pop();
     const fileName = `${Date.now()}.${ext}`;
     const { error } = await supabase.storage.from("cake-images").upload(fileName, file);
-
     if (error) {
       showToast("Görsel yüklenemedi!", "error");
     } else {
@@ -64,15 +78,42 @@ export default function Dashboard({ onLogout }) {
     setUploading(false);
   };
 
-  // ── Kaydet / Güncelle ─────────────────────────────────────
+  // ── Ek görsel yükle ──────────────────────────────────────
+  const handleExtraUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const fileName = `${Date.now()}_extra.${ext}`;
+    const { error } = await supabase.storage.from("cake-images").upload(fileName, file);
+    if (error) {
+      showToast("Ek görsel yüklenemedi!", "error");
+    } else {
+      const { data } = supabase.storage.from("cake-images").getPublicUrl(fileName);
+      setForm(f => ({ ...f, images: [...(f.images || []), data.publicUrl] }));
+      showToast("Ek görsel yüklendi ✓");
+    }
+    setUploading(false);
+    e.target.value = "";
+  };
+
+  // ── Ek görsel kaldır ─────────────────────────────────────
+  const removeExtraImage = (index) => {
+    setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
+  };
+
+  // ── Kaydet / Güncelle ────────────────────────────────────
   const handleSave = async () => {
     if (!form.title || !form.image) {
       showToast("İsim ve görsel zorunlu!", "error"); return;
     }
     setSaving(true);
+    const maxOrder = cakes.length > 0 ? Math.max(...cakes.map(c => c.sort_order ?? 0)) : -10;
     const payload = {
       ...form,
       tags: form.tags.split(",").map(t => t.trim()).filter(Boolean),
+      images: form.images || [],
+      sort_order: form.sort_order ?? (maxOrder + 10),
     };
 
     let error;
@@ -92,16 +133,26 @@ export default function Dashboard({ onLogout }) {
     setSaving(false);
   };
 
-  // ── Düzenle ───────────────────────────────────────────────
+  // ── Düzenle ──────────────────────────────────────────────
   const handleEdit = (cake) => {
     setEditId(cake.id);
-    setForm({ ...cake, tags: Array.isArray(cake.tags) ? cake.tags.join(", ") : cake.tags });
+    setForm({
+      ...cake,
+      tags: Array.isArray(cake.tags) ? cake.tags.join(", ") : (cake.tags || ""),
+      images: Array.isArray(cake.images) ? cake.images : [],
+      sort_order: cake.sort_order ?? 0,
+    });
     setPreview(cake.image);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ── Sil ───────────────────────────────────────────────────
+  // ── Sil (storage temizliğiyle birlikte) ──────────────────
   const handleDelete = async (id) => {
+    const cake = cakes.find(c => c.id === id);
+    if (cake) {
+      await removeFromStorage(cake.image);
+      for (const url of (cake.images || [])) await removeFromStorage(url);
+    }
     await supabase.from("cakes").delete().eq("id", id);
     setDeleteId(null);
     showToast("Pasta silindi.");
@@ -114,10 +165,23 @@ export default function Dashboard({ onLogout }) {
     fetchCakes();
   };
 
+  // ── Sıralama (↑/↓) ───────────────────────────────────────
+  const moveCake = async (index, dir) => {
+    const targetIndex = index + dir;
+    if (targetIndex < 0 || targetIndex >= cakes.length) return;
+    const a = cakes[index];
+    const b = cakes[targetIndex];
+    await Promise.all([
+      supabase.from("cakes").update({ sort_order: b.sort_order }).eq("id", a.id),
+      supabase.from("cakes").update({ sort_order: a.sort_order }).eq("id", b.id),
+    ]);
+    fetchCakes();
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "#F7EDE6", fontFamily: "'Jost', sans-serif" }}>
 
-      {/* ── Toast ──────────────────────────────────────────── */}
+      {/* ── Toast ── */}
       <AnimatePresence>
         {toast && (
           <Motion.div
@@ -135,7 +199,7 @@ export default function Dashboard({ onLogout }) {
         )}
       </AnimatePresence>
 
-      {/* ── Header ─────────────────────────────────────────── */}
+      {/* ── Header ── */}
       <div style={{
         background: "#2A1A1F", padding: "16px 32px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -181,7 +245,7 @@ export default function Dashboard({ onLogout }) {
 
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px" }}>
 
-        {/* ── Form ───────────────────────────────────────────── */}
+        {/* ── Form ── */}
         <Motion.div
           initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
           style={{
@@ -244,9 +308,9 @@ export default function Dashboard({ onLogout }) {
                 onBlur={e  => e.target.style.borderColor = "#E8D5B0"} />
             </div>
 
-            {/* Görsel yükle */}
+            {/* Ana görsel */}
             <div style={{ gridColumn: "span 2" }}>
-              <label style={labelStyle}>Pasta Görseli *</label>
+              <label style={labelStyle}>Ana Görsel *</label>
               <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                 <div
                   onClick={() => fileRef.current.click()}
@@ -257,15 +321,13 @@ export default function Dashboard({ onLogout }) {
                     alignItems: "center", justifyContent: "center",
                     cursor: "pointer", overflow: "hidden",
                     background: preview ? "transparent" : "#FDF6F0",
-                    transition: "border-color 0.3s",
-                    position: "relative",
+                    transition: "border-color 0.3s", position: "relative",
                   }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = "var(--gold)"}
                   onMouseLeave={e => e.currentTarget.style.borderColor = "#E8D5B0"}
                 >
                   {preview ? (
-                    <img src={preview} alt="önizleme"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={preview} alt="önizleme" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
                     <>
                       <span style={{ fontSize: "32px", marginBottom: "8px" }}>📷</span>
@@ -284,21 +346,15 @@ export default function Dashboard({ onLogout }) {
                     </div>
                   )}
                 </div>
-                <input ref={fileRef} type="file" accept="image/*"
-                  onChange={handleUpload} style={{ display: "none" }} />
+                <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} style={{ display: "none" }} />
 
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: "12px", color: "#7A5260", lineHeight: 1.7, marginBottom: "12px" }}>
-                    Görsele tıklayarak fotoğraf seç. Yüklenen görsel otomatik olarak Supabase Storage'a kaydedilir.
+                    Görsele tıklayarak fotoğraf seç. Önerilen: kare format, min. 800x800px, JPG/PNG
                   </p>
-                  <p style={{ fontSize: "11px", color: "#B5506A" }}>
-                    Önerilen: Kare format, min. 800x800px, JPG/PNG
-                  </p>
-
-                  {/* Öne çıkan */}
                   <label style={{
                     display: "flex", alignItems: "center", gap: "10px",
-                    marginTop: "16px", cursor: "pointer",
+                    marginTop: "8px", cursor: "pointer",
                     fontSize: "12px", color: "#4A2D35",
                   }}>
                     <input type="checkbox" checked={form.featured}
@@ -309,9 +365,50 @@ export default function Dashboard({ onLogout }) {
                 </div>
               </div>
             </div>
+
+            {/* Ek görseller */}
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={labelStyle}>Ek Görseller (detay sayfasında galeri olarak gösterilir)</label>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "flex-start" }}>
+                {(form.images || []).map((url, i) => (
+                  <div key={i} style={{ position: "relative" }}>
+                    <img src={url} alt={`ek ${i + 1}`}
+                      style={{ width: "72px", height: "72px", objectFit: "cover", borderRadius: "2px" }} />
+                    <button
+                      onClick={() => removeExtraImage(i)}
+                      style={{
+                        position: "absolute", top: "-6px", right: "-6px",
+                        width: "20px", height: "20px", borderRadius: "50%",
+                        background: "#E8354A", color: "white", border: "none",
+                        cursor: "pointer", fontSize: "12px", lineHeight: 1,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <div
+                  onClick={() => extraFileRef.current.click()}
+                  style={{
+                    width: "72px", height: "72px",
+                    border: "2px dashed #E8D5B0", borderRadius: "2px",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "pointer", fontSize: "24px", color: "#B5506A",
+                    transition: "border-color 0.3s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--gold)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "#E8D5B0"}
+                >
+                  +
+                </div>
+                <input ref={extraFileRef} type="file" accept="image/*"
+                  onChange={handleExtraUpload} style={{ display: "none" }} />
+              </div>
+            </div>
           </div>
 
-          {/* Butonlar */}
+          {/* Kaydet butonları */}
           <div style={{ display: "flex", gap: "12px", marginTop: "28px" }}>
             <Motion.button
               onClick={handleSave} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
@@ -344,7 +441,7 @@ export default function Dashboard({ onLogout }) {
           </div>
         </Motion.div>
 
-        {/* ── Pasta Listesi ──────────────────────────────────── */}
+        {/* ── Pasta Listesi ── */}
         <div>
           <h2 style={{
             fontFamily: "'Cormorant Garamond', serif", fontSize: "26px",
@@ -358,10 +455,7 @@ export default function Dashboard({ onLogout }) {
               Yükleniyor...
             </div>
           ) : cakes.length === 0 ? (
-            <div style={{
-              textAlign: "center", padding: "60px",
-              background: "white", color: "#7A5260", fontSize: "14px",
-            }}>
+            <div style={{ textAlign: "center", padding: "60px", background: "white", color: "#7A5260", fontSize: "14px" }}>
               Henüz pasta eklenmemiş.
             </div>
           ) : (
@@ -378,7 +472,6 @@ export default function Dashboard({ onLogout }) {
                       overflow: "hidden",
                     }}
                   >
-                    {/* Görsel */}
                     <div style={{ position: "relative", aspectRatio: "4/3", overflow: "hidden" }}>
                       <img src={cake.image} alt={cake.title}
                         style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -392,12 +485,22 @@ export default function Dashboard({ onLogout }) {
                           Öne Çıkan
                         </div>
                       )}
+                      {/* Ek görsel sayısı */}
+                      {cake.images?.length > 0 && (
+                        <div style={{
+                          position: "absolute", bottom: "8px", right: "8px",
+                          background: "rgba(42,26,31,0.6)", color: "rgba(232,213,176,0.9)",
+                          fontSize: "9px", letterSpacing: "1px",
+                          padding: "3px 8px",
+                        }}>
+                          +{cake.images.length} görsel
+                        </div>
+                      )}
                     </div>
 
-                    {/* Bilgi */}
                     <div style={{ padding: "16px" }}>
                       <div style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "#D4748A", marginBottom: "4px" }}>
-                        {CATEGORIES.find(c => c.id === cake.category)?.label}
+                        #{i + 1} · {CATEGORIES.find(c => c.id === cake.category)?.label}
                       </div>
                       <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "18px", fontWeight: 400, color: "#2A1A1F", marginBottom: "6px" }}>
                         {cake.title}
@@ -406,8 +509,14 @@ export default function Dashboard({ onLogout }) {
                         {cake.description?.slice(0, 80)}{cake.description?.length > 80 ? "..." : ""}
                       </div>
 
-                      {/* Aksiyonlar */}
-                      <div style={{ display: "flex", gap: "8px" }}>
+                      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                        {/* Sıralama */}
+                        <button onClick={() => moveCake(i, -1)} disabled={i === 0}
+                          style={{ ...actionBtn, background: "#F7EDE6", color: "#7A5260", opacity: i === 0 ? 0.3 : 1, fontSize: "14px" }}
+                          title="Yukarı taşı">↑</button>
+                        <button onClick={() => moveCake(i, 1)} disabled={i === cakes.length - 1}
+                          style={{ ...actionBtn, background: "#F7EDE6", color: "#7A5260", opacity: i === cakes.length - 1 ? 0.3 : 1, fontSize: "14px" }}
+                          title="Aşağı taşı">↓</button>
                         <button onClick={() => handleEdit(cake)} style={{ ...actionBtn, background: "#2A1A1F", color: "white" }}>
                           ✏️ Düzenle
                         </button>
@@ -428,7 +537,7 @@ export default function Dashboard({ onLogout }) {
         </div>
       </div>
 
-      {/* ── Silme onay modalı ──────────────────────────────────── */}
+      {/* ── Silme onay modalı ── */}
       <AnimatePresence>
         {deleteId && (
           <Motion.div
@@ -454,7 +563,7 @@ export default function Dashboard({ onLogout }) {
                 Pastayı Sil
               </h3>
               <p style={{ fontSize: "13px", color: "#7A5260", marginBottom: "28px", lineHeight: 1.6 }}>
-                Bu pasta kalıcı olarak silinecek. Bu işlem geri alınamaz.
+                Bu pasta ve tüm görselleri kalıcı olarak silinecek. Bu işlem geri alınamaz.
               </p>
               <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
                 <button onClick={() => setDeleteId(null)}

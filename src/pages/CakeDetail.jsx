@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
+import { optimizeImageUrl } from "../lib/imageUtils";
 
 const WA_NUMBER = "905324224244";
 
@@ -14,21 +15,23 @@ const CATEGORY_LABELS = {
 };
 
 export default function CakeDetail() {
-  const { id }       = useParams();
-  const navigate     = useNavigate();
-  const [cake, setCake]       = useState(null);
-  const [related, setRelated] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const { id }   = useParams();
+  const navigate = useNavigate();
+  const [cake, setCake]           = useState(null);
+  const [related, setRelated]     = useState([]);
+  const [loading, setLoading]     = useState(true);
+  const [activeImg, setActiveImg] = useState(0);
+  const [lightbox, setLightbox]   = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
-      setImgLoaded(false);
+      setActiveImg(0);
       const { data } = await supabase.from("cakes").select("*").eq("id", id).single();
       setCake(data);
 
       if (data) {
+        document.title = `${data.title} | Litros Cake House`;
         const { data: rel } = await supabase
           .from("cakes").select("*")
           .eq("category", data.category)
@@ -39,7 +42,23 @@ export default function CakeDetail() {
       setLoading(false);
     };
     fetch();
+    return () => { document.title = "Litros Cake House · El Yapımı Butik Pastalar"; };
   }, [id]);
+
+  // ESC ile lightbox kapat
+  useEffect(() => {
+    if (!lightbox) return;
+    const handler = (e) => { if (e.key === "Escape") setLightbox(false); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightbox]);
+
+  const allImages = cake
+    ? [cake.image, ...(Array.isArray(cake.images) ? cake.images : [])].filter(Boolean)
+    : [];
+
+  const prevImg = () => setActiveImg(i => (i - 1 + allImages.length) % allImages.length);
+  const nextImg = () => setActiveImg(i => (i + 1) % allImages.length);
 
   const waMessage = cake
     ? `Merhaba, "${cake.title}" pastası hakkında bilgi almak istiyorum.`
@@ -79,6 +98,7 @@ export default function CakeDetail() {
           .detail-navbar-wa { display: none !important; }
         }
       `}</style>
+
       {/* ── Navbar benzeri üst bar ── */}
       <div style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 800,
@@ -89,7 +109,7 @@ export default function CakeDetail() {
         minHeight: "60px",
       }}>
         <Motion.button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           whileHover={{ x: -4 }} whileTap={{ scale: 0.96 }}
           style={backBtnStyle}
         >
@@ -129,33 +149,30 @@ export default function CakeDetail() {
           alignItems: "start",
         }}>
 
-          {/* ── Sol: Görsel ── */}
+          {/* ── Sol: Görsel + Galeri ── */}
           <Motion.div
             initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="detail-sticky"
             style={{ position: "sticky", top: "80px" }}
           >
-            <div style={{
-              aspectRatio: "3/4", overflow: "hidden",
-              background: "var(--cream-dark)",
-              position: "relative",
-            }}>
-              {!imgLoaded && (
-                <div style={{
-                  position: "absolute", inset: 0,
-                  background: "linear-gradient(135deg, var(--cream-dark) 0%, var(--gold-light) 100%)",
-                  opacity: 0.4,
-                }} />
-              )}
-              <img
-                src={cake.image} alt={cake.title}
-                onLoad={() => setImgLoaded(true)}
-                style={{
-                  width: "100%", height: "100%", objectFit: "cover",
-                  opacity: imgLoaded ? 1 : 0,
-                  transition: "opacity 0.5s ease",
-                }}
+            {/* Ana görsel */}
+            <div
+              onClick={() => setLightbox(true)}
+              style={{
+                aspectRatio: "3/4", overflow: "hidden",
+                background: "var(--cream-dark)",
+                position: "relative", cursor: "zoom-in",
+              }}
+            >
+              <Motion.img
+                key={activeImg}
+                src={optimizeImageUrl(allImages[activeImg], 800, 85)}
+                alt={cake.title}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
               {cake.featured && (
                 <div style={{
@@ -168,7 +185,46 @@ export default function CakeDetail() {
                   Öne Çıkan
                 </div>
               )}
+              {allImages.length > 1 && (
+                <div style={{
+                  position: "absolute", bottom: "12px", right: "12px",
+                  background: "rgba(28,20,16,0.6)", color: "var(--gold-light)",
+                  fontFamily: "'Jost', sans-serif",
+                  fontSize: "9px", letterSpacing: "1px",
+                  padding: "4px 10px",
+                }}>
+                  {activeImg + 1} / {allImages.length}
+                </div>
+              )}
             </div>
+
+            {/* Thumbnail şeridi */}
+            {allImages.length > 1 && (
+              <div style={{
+                display: "flex", gap: "8px", marginTop: "12px",
+                flexWrap: "wrap",
+              }}>
+                {allImages.map((img, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setActiveImg(i)}
+                    style={{
+                      width: "64px", height: "64px", overflow: "hidden",
+                      cursor: "pointer", flexShrink: 0,
+                      outline: i === activeImg ? "2px solid var(--gold)" : "2px solid transparent",
+                      outlineOffset: "2px",
+                      transition: "outline-color 0.2s",
+                    }}
+                  >
+                    <img
+                      src={optimizeImageUrl(img, 150, 70)}
+                      alt={`${cake.title} ${i + 1}`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </Motion.div>
 
           {/* ── Sağ: Bilgi ── */}
@@ -177,7 +233,6 @@ export default function CakeDetail() {
             transition={{ duration: 0.6, delay: 0.2 }}
             style={{ paddingTop: "8px" }}
           >
-            {/* Kategori */}
             <div style={{
               fontFamily: "'Jost', sans-serif",
               fontSize: "10px", letterSpacing: "3px",
@@ -189,7 +244,6 @@ export default function CakeDetail() {
               {CATEGORY_LABELS[cake.category] || cake.category}
             </div>
 
-            {/* Başlık */}
             <h1 style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: "clamp(36px, 5vw, 56px)",
@@ -199,7 +253,6 @@ export default function CakeDetail() {
               {cake.title}
             </h1>
 
-            {/* Alt başlık */}
             {cake.subtitle && (
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -211,10 +264,8 @@ export default function CakeDetail() {
               </p>
             )}
 
-            {/* Ayraç */}
             <div style={{ width: "48px", height: "1px", background: "var(--gold)", marginBottom: "28px" }} />
 
-            {/* Açıklama */}
             {cake.description && (
               <p style={{
                 fontFamily: "'Jost', sans-serif",
@@ -225,7 +276,6 @@ export default function CakeDetail() {
               </p>
             )}
 
-            {/* Taglar */}
             {cake.tags?.length > 0 && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "40px" }}>
                 {cake.tags.map((tag, i) => (
@@ -243,7 +293,6 @@ export default function CakeDetail() {
               </div>
             )}
 
-            {/* CTA Butonları */}
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <Motion.a
                 href={waUrl} target="_blank" rel="noopener noreferrer"
@@ -325,7 +374,7 @@ export default function CakeDetail() {
                   style={{ cursor: "pointer" }}
                 >
                   <div style={{ aspectRatio: "3/4", overflow: "hidden", marginBottom: "16px" }}>
-                    <img src={r.image} alt={r.title}
+                    <img src={optimizeImageUrl(r.image, 400, 75)} alt={r.title}
                       style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }}
                       onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
                       onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
@@ -364,6 +413,100 @@ export default function CakeDetail() {
           © 2025 Litros Cake House · El Yapımı · Özel Tasarım
         </p>
       </div>
+
+      {/* ── Lightbox ── */}
+      <AnimatePresence>
+        {lightbox && (
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setLightbox(false)}
+            style={{
+              position: "fixed", inset: 0,
+              background: "rgba(0,0,0,0.94)",
+              zIndex: 9999,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+          >
+            {/* Kapat */}
+            <button
+              onClick={() => setLightbox(false)}
+              style={{
+                position: "absolute", top: "20px", right: "24px",
+                background: "none", border: "none", color: "rgba(255,255,255,0.7)",
+                fontSize: "32px", cursor: "pointer", lineHeight: 1,
+                fontFamily: "sans-serif",
+              }}
+            >
+              ×
+            </button>
+
+            {/* Önceki */}
+            {allImages.length > 1 && (
+              <button
+                onClick={e => { e.stopPropagation(); prevImg(); }}
+                style={{
+                  position: "absolute", left: "20px",
+                  background: "rgba(255,255,255,0.1)", border: "none",
+                  color: "white", fontSize: "28px", cursor: "pointer",
+                  width: "48px", height: "48px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: "50%",
+                }}
+              >
+                ‹
+              </button>
+            )}
+
+            <Motion.img
+              key={activeImg}
+              src={optimizeImageUrl(allImages[activeImg], 1200, 90)}
+              alt={cake.title}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                maxWidth: "88vw", maxHeight: "88vh",
+                objectFit: "contain",
+                boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
+              }}
+            />
+
+            {/* Sonraki */}
+            {allImages.length > 1 && (
+              <button
+                onClick={e => { e.stopPropagation(); nextImg(); }}
+                style={{
+                  position: "absolute", right: "20px",
+                  background: "rgba(255,255,255,0.1)", border: "none",
+                  color: "white", fontSize: "28px", cursor: "pointer",
+                  width: "48px", height: "48px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: "50%",
+                }}
+              >
+                ›
+              </button>
+            )}
+
+            {/* Sayaç */}
+            {allImages.length > 1 && (
+              <div style={{
+                position: "absolute", bottom: "20px", left: "50%",
+                transform: "translateX(-50%)",
+                color: "rgba(255,255,255,0.5)",
+                fontFamily: "'Jost', sans-serif",
+                fontSize: "11px", letterSpacing: "2px",
+              }}>
+                {activeImg + 1} / {allImages.length}
+              </div>
+            )}
+          </Motion.div>
+        )}
+      </AnimatePresence>
     </Motion.div>
   );
 }

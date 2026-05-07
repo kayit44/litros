@@ -35,12 +35,16 @@ export default function Hero() {
   const [heroImg, setHeroImg] = useState(null);
 
   useEffect(() => {
-    supabase
-      .from("cakes")
-      .select("*")
-      .eq("hero", true)
-      .limit(1)
-      .then(({ data }) => { if (data && data.length > 0) setHeroImg(data[0]); });
+    const load = async () => {
+      const { data: heroData } = await supabase
+        .from("cakes").select("*").eq("hero", true).limit(1);
+      if (heroData?.length > 0) { setHeroImg(heroData[0]); return; }
+
+      const { data: featuredData } = await supabase
+        .from("cakes").select("*").eq("featured", true).limit(1);
+      if (featuredData?.length > 0) setHeroImg(featuredData[0]);
+    };
+    load();
   }, []);
 
   // Parallax scroll efekti

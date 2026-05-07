@@ -1,13 +1,28 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion as Motion, AnimatePresence, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { optimizeImageUrl } from "../lib/imageUtils";
 import { categories } from "../data/cakes";
 
 const WA_NUMBER  = "905324224244";
 const WA_MESSAGE = (title) => `Merhaba, "${title}" pastası hakkında sipariş vermek istiyorum.`;
 const WA_URL     = (title) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE(title))}`;
+
+const PAGE_SIZE = 12;
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth <= breakpoint
+  );
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 const cardVariants = {
   hidden:  { opacity: 0, y: 48, scale: 0.96 },
@@ -25,9 +40,10 @@ const cardVariants = {
   },
 };
 
-function CakeCard({ cake, index }) {
-  const isMobile = window.innerWidth <= 768;
-  const [hovered, setHovered] = useState(isMobile);
+function CakeCard({ cake, index, activeCategory }) {
+  const isMobile = useIsMobile();
+  const [hovered, setHovered] = useState(false);
+  const overlayVisible = isMobile || hovered;
   const navigate = useNavigate();
 
   return (
@@ -38,7 +54,11 @@ function CakeCard({ cake, index }) {
       initial="hidden"
       animate="visible"
       exit="exit"
-      onClick={() => { sessionStorage.setItem('galleryScrollPending', String(window.scrollY)); navigate(`/pasta/${cake.id}`); }}
+      onClick={() => {
+        sessionStorage.setItem("galleryScrollPending", String(window.scrollY));
+        sessionStorage.setItem("galleryCategory", activeCategory);
+        navigate(`/pasta/${cake.id}`);
+      }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       style={{
@@ -51,16 +71,16 @@ function CakeCard({ cake, index }) {
     >
       <div style={{ overflow: "hidden", aspectRatio: "4/5" }}>
         <Motion.img
-          src={cake.image}
+          src={optimizeImageUrl(cake.image, 600, 80)}
           alt={cake.title}
-          animate={{ scale: hovered ? 1.07 : 1 }}
+          animate={{ scale: overlayVisible ? 1.07 : 1 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
         />
       </div>
 
       <Motion.div
-        animate={{ opacity: hovered ? 1 : 0 }}
+        animate={{ opacity: overlayVisible ? 1 : 0 }}
         transition={{ duration: 0.4 }}
         style={{
           position: "absolute", inset: 0,
@@ -70,7 +90,7 @@ function CakeCard({ cake, index }) {
         }}
       >
         <Motion.p
-          animate={{ y: hovered ? 0 : 12, opacity: hovered ? 1 : 0 }}
+          animate={{ y: overlayVisible ? 0 : 12, opacity: overlayVisible ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
           style={{
             fontFamily: "'Jost', sans-serif", fontSize: "13px",
@@ -82,7 +102,7 @@ function CakeCard({ cake, index }) {
         </Motion.p>
 
         <Motion.h3
-          animate={{ y: hovered ? 0 : 16, opacity: hovered ? 1 : 0 }}
+          animate={{ y: overlayVisible ? 0 : 16, opacity: overlayVisible ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.08 }}
           style={{
             fontFamily: "'Cormorant Garamond', serif", fontSize: "24px",
@@ -93,7 +113,7 @@ function CakeCard({ cake, index }) {
         </Motion.h3>
 
         <Motion.p
-          animate={{ y: hovered ? 0 : 16, opacity: hovered ? 1 : 0 }}
+          animate={{ y: overlayVisible ? 0 : 16, opacity: overlayVisible ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.11 }}
           style={{
             fontFamily: "'Jost', sans-serif", fontSize: "14px",
@@ -105,11 +125,11 @@ function CakeCard({ cake, index }) {
         </Motion.p>
 
         <Motion.div
-          animate={{ y: hovered ? 0 : 16, opacity: hovered ? 1 : 0 }}
+          animate={{ y: overlayVisible ? 0 : 16, opacity: overlayVisible ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.14 }}
           style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "20px" }}
         >
-          {cake.tags.map((tag) => (
+          {cake.tags?.map((tag) => (
             <span key={tag} style={{
               fontFamily: "'Jost', sans-serif", fontSize: "12px",
               letterSpacing: "1px", textTransform: "uppercase",
@@ -121,8 +141,6 @@ function CakeCard({ cake, index }) {
             </span>
           ))}
         </Motion.div>
-
-      
       </Motion.div>
 
       {cake.featured && (
@@ -146,40 +164,60 @@ function CakeCard({ cake, index }) {
 }
 
 export default function Gallery() {
-  const [activeCategory, setActiveCategory] = useState("hepsi");
-  const [cakes,          setCakes]          = useState([]);
-  const [loading,        setLoading]        = useState(true);
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const saved = sessionStorage.getItem("galleryCategory");
+    if (saved) { sessionStorage.removeItem("galleryCategory"); return saved; }
+    return "hepsi";
+  });
+  const [cakes,       setCakes]       = useState([]);
+  const [page,        setPage]        = useState(0);
+  const [hasMore,     setHasMore]     = useState(false);
+  const [loading,     setLoading]     = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const sectionRef = useRef(null);
   const isInView   = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Supabase'den pastaları çek
-  useEffect(() => {
-    const fetchCakes = async () => {
-      setLoading(true);
-      const { data } = await supabase
-        .from("cakes")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setCakes(data || []);
-      setLoading(false);
-    };
-    fetchCakes();
+  const fetchCakes = useCallback(async (category, pageNum, append) => {
+    pageNum === 0 ? setLoading(true) : setLoadingMore(true);
+
+    let q = supabase
+      .from("cakes")
+      .select("*", { count: "exact" })
+      .order("sort_order", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: false })
+      .range(pageNum * PAGE_SIZE, pageNum * PAGE_SIZE + PAGE_SIZE - 1);
+
+    if (category !== "hepsi") q = q.eq("category", category);
+
+    const { data, count } = await q;
+
+    if (append) setCakes(prev => [...prev, ...(data || [])]);
+    else setCakes(data || []);
+
+    setHasMore((pageNum + 1) * PAGE_SIZE < (count ?? 0));
+    pageNum === 0 ? setLoading(false) : setLoadingMore(false);
   }, []);
 
-  // Veriler yüklenince scroll pozisyonunu restore et
+  useEffect(() => {
+    setPage(0);
+    fetchCakes(activeCategory, 0, false);
+  }, [activeCategory, fetchCakes]);
+
+  // Scroll pozisyonunu restore et
   useEffect(() => {
     if (loading) return;
-    const pos = sessionStorage.getItem('galleryScrollPending');
+    const pos = sessionStorage.getItem("galleryScrollPending");
     if (pos) {
-      sessionStorage.removeItem('galleryScrollPending');
-      sessionStorage.removeItem('galleryScroll');
+      sessionStorage.removeItem("galleryScrollPending");
       setTimeout(() => window.scrollTo({ top: parseInt(pos), behavior: "instant" }), 100);
     }
   }, [loading]);
 
-  const filtered = activeCategory === "hepsi"
-    ? cakes
-    : cakes.filter((c) => c.category === activeCategory);
+  const handleLoadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    fetchCakes(activeCategory, next, true);
+  };
 
   return (
     <section
@@ -281,7 +319,7 @@ export default function Gallery() {
         }}>
           Yükleniyor...
         </div>
-      ) : filtered.length === 0 ? (
+      ) : cakes.length === 0 ? (
         <div style={{
           textAlign: "center", padding: "80px 0",
           fontFamily: "'Cormorant Garamond', serif",
@@ -291,17 +329,52 @@ export default function Gallery() {
           Bu kategoride henüz pasta eklenmemiş.
         </div>
       ) : (
-        <Motion.div layout style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px, 28vw, 340px), 1fr))",
-          gap: "clamp(12px, 2vw, 20px)",
-        }}>
-          <AnimatePresence mode="popLayout">
-            {filtered.map((cake, i) => (
-              <CakeCard key={cake.id} cake={cake} index={i} />
-            ))}
-          </AnimatePresence>
-        </Motion.div>
+        <>
+          <Motion.div layout style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px, 28vw, 340px), 1fr))",
+            gap: "clamp(12px, 2vw, 20px)",
+          }}>
+            <AnimatePresence mode="popLayout">
+              {cakes.map((cake, i) => (
+                <CakeCard
+                  key={cake.id}
+                  cake={cake}
+                  index={i}
+                  activeCategory={activeCategory}
+                />
+              ))}
+            </AnimatePresence>
+          </Motion.div>
+
+          {/* Daha Fazla Göster */}
+          {hasMore && (
+            <div style={{ textAlign: "center", marginTop: "48px" }}>
+              <Motion.button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                style={{
+                  padding: "14px 48px",
+                  background: "transparent",
+                  border: "1px solid var(--gold-light)",
+                  color: "var(--brown)",
+                  fontFamily: "'Jost', sans-serif",
+                  fontSize: "11px", letterSpacing: "2px",
+                  textTransform: "uppercase",
+                  cursor: loadingMore ? "not-allowed" : "pointer",
+                  opacity: loadingMore ? 0.6 : 1,
+                  transition: "border-color 0.3s, color 0.3s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--gold)"; e.currentTarget.style.color = "var(--dark)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--gold-light)"; e.currentTarget.style.color = "var(--brown)"; }}
+              >
+                {loadingMore ? "Yükleniyor..." : "Daha Fazla Göster"}
+              </Motion.button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Alt CTA Bandı */}

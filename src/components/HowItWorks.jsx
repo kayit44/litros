@@ -136,7 +136,7 @@ export default function HowItWorks() {
               animate={isInView ? { scale: 1, rotate: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.3 + i * 0.15, ease: "backOut" }}
               style={{
-                width: "64px", height: "64px", borderRadius: "50%",
+                width: "80px", height: "80px", borderRadius: "50%",
                 border: "1px solid var(--gold)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: "24px",
@@ -147,7 +147,7 @@ export default function HowItWorks() {
 
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "28px", fontWeight: 500,
+                fontSize: "42px", fontWeight: 500,
                 color: "var(--gold)", lineHeight: 1,
               }}>
                 {step.number}
