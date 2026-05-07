@@ -136,22 +136,23 @@ export default function HowItWorks() {
               animate={isInView ? { scale: 1, rotate: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.3 + i * 0.15, ease: "backOut" }}
               style={{
-                width: "80px", height: "80px", borderRadius: "50%",
+                width: "72px", height: "72px", borderRadius: "50%",
                 border: "1px solid var(--gold)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: "24px",
                 background: "rgba(201,169,110,0.08)",
                 position: "relative",
+                flexShrink: 0,
               }}
             >
 
-              <span style={{
+              <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "42px", fontWeight: 500,
+                fontSize: "clamp(32px, 5vw, 40px)", fontWeight: 500,
                 color: "var(--gold)", lineHeight: 1,
               }}>
                 {step.number}
-              </span>
+              </div>
             </Motion.div>
 
             {/* İkon */}

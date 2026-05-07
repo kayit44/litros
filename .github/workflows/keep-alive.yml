@@ -1,0 +1,23 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: '0 9 */3 * *'  # Her 3 günde bir sabah 9'da çalışır
+  workflow_dispatch:         # Manuel tetiklemek için
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://wwuuurdoqxgzppiumrie.supabase.co/rest/v1/cakes?select=id&limit=1" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dXV1cmRvcXhnenBwaXVtcmllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODM1NzEsImV4cCI6MjA4ODc1OTU3MX0.5cNLIxzRrsYRB3FkCyeKQT-5g-0BjDLSgVH52EF0TMA" \
+            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3dXV1cmRvcXhnenBwaXVtcmllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODM1NzEsImV4cCI6MjA4ODc1OTU3MX0.5cNLIxzRrsYRB3FkCyeKQT-5g-0BjDLSgVH52EF0TMA")
+          echo "Supabase yanıt kodu: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "HATA: Supabase yanıt vermedi!"
+            exit 1
+          fi
+          echo "Supabase aktif."
